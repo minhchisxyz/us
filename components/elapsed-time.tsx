@@ -1,48 +1,34 @@
 'use client'
 
 import {useEffect, useState} from "react";
-import {START_DATE} from "@/lib/constants";
+import {getTimeDifference, getTotalDays} from "@/lib/date-service";
 
 
 export default function ElapsedTime() {
-  const startDay = START_DATE
   const [elapsed, setElapsed] = useState<string[]>([])
+  const [showYear, setShowYear] = useState(true)
   useEffect(() => {
-    const MS = {
-      second: 1000,
-      minute: 1000 * 60,
-      hour: 1000 * 60 * 60,
-      day: 1000 * 60 * 60 * 24,
-      month: 1000 * 60 * 60 * 24 * 30, // approx month
-      year: 1000 * 60 * 60 * 24 * 365, // approx year
-    }
-
-    function formatDiff(ms: number) {
-      let r = ms
-      const years = Math.floor(r / MS.year); r %= MS.year
-      const months = Math.floor(r / MS.month); r %= MS.month
-      const days = Math.floor(r / MS.day); r %= MS.day
-      const hours = String(Math.floor(r / MS.hour)).padStart(2, '0'); r %= MS.hour
-      const minutes = String(Math.floor(r / MS.minute)).padStart(2, '0'); r %= MS.minute
-      const seconds = String(Math.floor(r / MS.second)).padStart(2, '0')
-
+    function formatDiff() {
+      const [years, months, days, hours, minutes, seconds] = getTimeDifference()
       const parts: string[] = []
-      parts.push(`${years} ${years > 1 ? 'years' : 'year'}`)
-      parts.push(`${months} ${months > 1 ? 'months' : 'month'}`)
+      if (showYear) {
+        parts.push(`${years} ${years > 1 ? 'years' : 'year'}`)
+        parts.push(`${months} ${months > 1 ? 'months' : 'month'}`)
+      } else {
+        const totalMonths = years * 12 + months
+        parts.push(`${totalMonths} ${totalMonths > 1 ? 'months' : 'month'}`)
+      }
       parts.push(`${days} ${days > 1 ? 'days' : 'day'}`)
-      parts.push(`${hours}h`, `${minutes}m`, `${seconds}s`)
+      parts.push(`${hours.toString().padStart(2, '0')}h`, `${minutes.toString().padStart(2, '0')}m`, `${seconds.toString().padStart(2, '0')}s`)
       return [parts.slice(0, 3).join(' '), parts.slice(3).join(' ')]
     }
 
     function tick() {
-      const diff = Math.max(0, Date.now() - startDay.getTime())
-      setElapsed(formatDiff(diff))
+      setElapsed(formatDiff())
     }
 
     function updateMeta() {
-      const now = new Date()
-      const timeDiff = Math.floor((now.getTime() - startDay.getTime()) / 1000 / 60 / 60 / 24)
-      // update title
+      const timeDiff = getTotalDays()
       document.title = `Been ${timeDiff} ${timeDiff > 1 ? 'days' : 'day'} together`
     }
 
@@ -54,10 +40,10 @@ export default function ElapsedTime() {
       clearInterval(id1)
       clearInterval(id2)
     }
-  }, [startDay])
+  }, [showYear])
 
   return (
-    <div className={`text-center flex flex-col justify-center`}>
+    <div className={`text-center flex flex-col justify-center hover:cursor-pointer`} onClick={() => setShowYear(!showYear)}>
       <span className={`hidden md:block text-3xl`}>
       { elapsed[0] }, { elapsed[1] }
       </span>

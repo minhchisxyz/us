@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
-import { START_DATE } from "@/lib/constants";
 import {Analytics} from "@vercel/analytics/next";
+import {getTotalDays} from "@/lib/date-service";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -14,7 +14,7 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
-const days = Math.floor((new Date().getTime() - START_DATE.getTime()) / (1000 * 60 * 60 * 24));
+const days = getTotalDays()
 
 export const metadata: Metadata = {
   title: `Been ${days} days together`,
