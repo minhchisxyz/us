@@ -28,41 +28,28 @@ function getMonths(start: Date, end: Date) {
   let months = 0
   while (start <= end) {
     months++
-    const currentMonth = start.getMonth()
-    if (currentMonth === 11) {
-      start.setFullYear(start.getFullYear() + 1)
-      start.setMonth(0)
-    } else {
-      start.setMonth(currentMonth + 1)
-    }
-    if (start > end) {
+    const temp = new Date(start)
+    temp.setMonth(temp.getMonth() + 1)
+    if (temp > end) {
       months--
-      if (currentMonth === 11) {
-        start.setFullYear(start.getFullYear() - 1)
-        start.setMonth(11)
-      } else {
-        start.setMonth(currentMonth)
-      }
+      temp.setMonth(temp.getMonth() - 1)
       break
     }
+    start.setMonth(start.getMonth() + 1)
   }
   return months
 }
 
-function getDays(start: Date, end: Date) {
-  const diff = end.getTime() - start.getTime()
+function getDaysAndTime(start: Date, end: Date) {
+  let diff = end.getTime() - start.getTime()
   const days = Math.floor(diff / DAY_MS)
-  return [diff - days * DAY_MS, days]
-}
-
-function getTime(ms: number) {
-  let diff = ms
+  diff -= days * DAY_MS
   const hours = Math.floor(diff / H_MS)
   diff -= hours * H_MS
   const minutes = Math.floor(diff / M_MS)
   diff -= minutes * M_MS
   const seconds = Math.floor(diff / S_MS)
-  return [   hours, minutes, seconds]
+  return [days, hours, minutes, seconds]
 }
 
 export function getTimeDifference() {
@@ -70,7 +57,6 @@ export function getTimeDifference() {
   const current = new Date(START_DATE)
   const years = getYears(current, now)
   const months = getMonths(current, now)
-  const [daysDiff, days] = getDays(current, now)
-  const [hours, minutes, seconds] = getTime(daysDiff)
+  const [days, hours, minutes, seconds] = getDaysAndTime(current, now)
   return [years, months, days, hours, minutes, seconds]
 }

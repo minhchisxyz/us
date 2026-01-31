@@ -20,7 +20,7 @@ export default function ElapsedTime() {
       }
       parts.push(`${days} ${days > 1 ? 'days' : 'day'}`)
       parts.push(`${hours.toString().padStart(2, '0')}h`, `${minutes.toString().padStart(2, '0')}m`, `${seconds.toString().padStart(2, '0')}s`)
-      return [parts.slice(0, 3).join(' '), parts.slice(3).join(' ')]
+      return [parts.slice(0, showYear ? 3 : 2).join(' '), parts.slice(showYear ? 3 : 2).join(' ')]
     }
 
     function tick() {
