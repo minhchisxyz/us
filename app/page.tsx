@@ -8,7 +8,7 @@ export default function Page() {
   return (
       <div className={`h-screen w-screen ${background}`}>
         <div className={`absolute bottom-1/10 w-full flex flex-row justify-center`}>
-          <div className={`bg-white/15 rounded-3xl p-5 w-7/10 font-bold backdrop-blur-xs text-black ${shadow} ${hover}`}>
+          <div className={`bg-white/15 rounded-3xl p-5 w-4/5 md:w-7/10 font-bold backdrop-blur-xs text-black ${shadow} ${hover}`}>
             <ElapsedTime/>
           </div>
         </div>
