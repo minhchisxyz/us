@@ -1,7 +1,7 @@
 import ElapsedTime from "@/components/elapsed-time";
 
 export default function Page() {
-  const background = `bg-[url('/mobile_background.jpg')] md:bg-[url('/desktop_background.jpg')] bg-no-repeat bg-cover bg-center bg-fixed`
+  const background = `bg-[url('/mobile_background.jpg')] lg:bg-[url('/desktop_background.jpg')] bg-no-repeat bg-cover bg-center bg-fixed`
   const shadow = 'shadow-[4px_4px_8px_#666666,-4px_-4px_6px_#ffffff]'
   const hover = 'hover:shadow-none hover:inset-shadow-[-4px_4px_8px_#666666,4px_-4px_6px_#ffffff]'
 
